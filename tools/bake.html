@@ -1,0 +1,10 @@
+<!doctype html><html><body><script type="module">
+import { generate, bakeTexture, encodeHeight } from './terrain-gen.js';
+const t0 = performance.now();
+const G = generate(2);
+const t1 = performance.now();
+const tex = bakeTexture(G, 2048);
+const hm = encodeHeight(G);
+let mn = 1e9, mx = -1e9; for (const v of G.H) { mn = Math.min(mn, v); mx = Math.max(mx, v); }
+window.__result = { tex: tex.toDataURL('image/jpeg', 0.86), hm: hm.toDataURL('image/png'), GW: G.GW, GH: G.GH, mn, mx, tGen: t1 - t0, tTex: performance.now() - t1 };
+</script></body></html>
