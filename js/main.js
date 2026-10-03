@@ -564,7 +564,8 @@ function fitPath(P) {
   const hx = size.x * 0.5 + 3, hz = size.z * 0.5 * 0.85 + 3; // half extents (z foreshortened by the tilt)
   // with setViewOffset the frustum spans the card too, so only part of it is visible
   const need = W < 720 ? Math.max(hx * (H + off) / W, hz * (H + off) / Math.max(H - off, 120)) : Math.max(hx * H / Math.max(W - off, 200), hz);
-  const d = clamp((need / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2))) * 1.08, 18, controls.maxDistance);
+  const d = clamp((need / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2))) * 1.22, 18, DEFAULT.dist * 3); // tilt: near edge appears wider
+  controls.maxDistance = Math.max(DEFAULT.dist * 1.7, d * 1.15);
   flyTo({ target: c, dist: d, polar: 0.62 });
 }
 card.addEventListener('click', (e) => {
