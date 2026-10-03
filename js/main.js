@@ -560,11 +560,11 @@ function fitPath(P) {
   const box = new THREE.Box3().setFromPoints(P.samples);
   const c = box.getCenter(new THREE.Vector3()); c.y = 0;
   const size = box.getSize(new THREE.Vector3());
-  const off = cardOffset();
-  const vw = innerWidth < 720 ? innerWidth : innerWidth - off, vh = innerWidth < 720 ? innerHeight - off : innerHeight;
-  const aspect = vw / vh;
-  const span = Math.max(size.x / aspect, size.z * 0.8) * 0.5 + 4;
-  const d = clamp((span / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2))) * (innerHeight / vh) * 1.05, 18, controls.maxDistance);
+  const off = cardOffset(), W = innerWidth, H = innerHeight;
+  const hx = size.x * 0.5 + 3, hz = size.z * 0.5 * 0.85 + 3; // half extents (z foreshortened by the tilt)
+  // with setViewOffset the frustum spans the card too, so only part of it is visible
+  const need = W < 720 ? Math.max(hx * (H + off) / W, hz * (H + off) / Math.max(H - off, 120)) : Math.max(hx * H / Math.max(W - off, 200), hz);
+  const d = clamp((need / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2))) * 1.08, 18, controls.maxDistance);
   flyTo({ target: c, dist: d, polar: 0.62 });
 }
 card.addEventListener('click', (e) => {
